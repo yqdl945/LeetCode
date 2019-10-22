@@ -314,6 +314,64 @@
    # 两个条件 ： t.c_id = u.u_id ;user_banned 剔除！
    ~~~
 
+4. 626换座位
+
+   ~~~mysql
+   # seat不动，更改ID值（双数的id-1,单数的ID+1，最后座位号是单数则不变）
+   if 嵌套if
+   case when xx then yy when xx2 then yy2 else yyy3 end
+   ~~~
+
+5. 1098小众书籍
+
+   ~~~mysql
+   #1 聚合函数判断
+   # 判断条件：orders < 10(sum函数)/上架日期限定：avaliable from < 2019-05-23
+   sum(if(dispatch_date在区间内，quantity,0))
+   @西红柿鸡蛋面：if(dispatch_date < 2018-06-23,0,quantity)——反其道行之！
+   # 涉及到group by且涉及到数据统计的使用having！
+   
+   #2 子查询——可读性差
+   @旋风菜刀
+   ~~~
+
+6. 1045 买下所有商品的客户
+
+   ~~~mysql
+   #distinct！！！
+   # 使用having count时注意后方的条件 语句使用()
+   having count(*) = (select count(*) from product)
+   
+   #2@西红柿鸡蛋面
+   select c.customer_id
+   from
+   (select customer_id,count(distinct(product_key)) cnt from customer group by customer_id) c,
+   (select count(1) cnt from product) p
+   where
+   c.cnt=p.cnt
+   
+   # 自己的解答可精简
+   select customer_id 
+   from customer c 
+   #left join product p 不需要！
+   #on c.product_key = p.product_key
+   group by c.customer_id
+   having count(distinct c.product_key) = (select count(*) from product)
+   ~~~
+
+7. 游戏IV
+
+   ~~~mysql
+   #count 函数条件不熟练！
+   #初始方向：提出首次登陆时间 作为暂时表 ——首次登陆时间+1 = 登陆时间（activity表）
+   #且 两者id相同
+   
+   #distinct
+   select round((count(a.player_id)/(select count(distinct player_id) from activity)),2) as fraction from(select player_id,min(event_date) md from activity
+   group by player_id) a inner join Activity ac on date(a.md) + 1 = date(ac.event_date)
+   and a.player_id = ac.player_id
+   ~~~
+
    
 
 
