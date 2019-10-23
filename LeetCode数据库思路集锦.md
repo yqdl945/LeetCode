@@ -359,7 +359,7 @@
    having count(distinct c.product_key) = (select count(*) from product)
    ~~~
 
-7. 游戏IV
+7. 550游戏IV
 
    ~~~mysql
    #count 函数条件不熟练！
@@ -370,6 +370,14 @@
    select round((count(a.player_id)/(select count(distinct player_id) from activity)),2) as fraction from(select player_id,min(event_date) md from activity
    group by player_id) a inner join Activity ac on date(a.md) + 1 = date(ac.event_date)
    and a.player_id = ac.player_id
+   ~~~
+
+8. 1126 activebusiness
+
+   ~~~mysql
+   #解题思路：
+   # 0 排序（可删除）1算avg值作为tmp 2 将e表中的oc值和tmp.avg_oc比较，选择
+   # 3 分组 条件 having count(*) >1
    ~~~
 
    
