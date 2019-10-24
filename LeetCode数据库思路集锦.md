@@ -380,6 +380,20 @@
    # 3 分组 条件 having count(*) >1
    ~~~
 
+9. 1112 每个学生最高分
+
+   ~~~mysql
+   #where条件部分存在两个条件在一个子查询语句中时使用：
+   where (o1,o2) in (select xxx)
+   
+   # 本打算在： 再套一层
+   select student_id, course_id from Enrollments
+   where (student_id,grade) in
+   (select student_id,max(grade) from Enrollments group by student_id)
+   group by student_id
+   order by student_id
+   ~~~
+
    
 
 
