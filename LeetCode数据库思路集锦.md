@@ -394,7 +394,32 @@
    order by student_id
    ~~~
 
-   
+10. 534游戏玩法III
+
+    new:  **sum(目标) over (partition by (主)order by（次）)**
+
+    ~~~mysql
+    # 按照日期求和
+    #1 sum over?
+    select 
+        player_id,
+        event_date,
+        sum(games_played) over(partition by player_id order by event_date) games_played_so_far
+    from activity
+    
+    #2 求和笛卡尔积！（join)
+    select a1.player_id,a1.event_date,sum(a2.games_played) games_played_so_far
+    from
+    activity a1,activity a2
+    where
+    a1.player_id=a2.player_id
+    and
+    a1.event_date>=a2.event_date
+    group by a1.player_id,a1.event_date
+    order by player_id,event_date
+    ~~~
+
+    
 
 
 
